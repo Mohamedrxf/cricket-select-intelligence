@@ -2,37 +2,31 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Shield, Target, Scale } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import cricketStadiumBg from "@/assets/cricket-stadium-bg.jpg";
+import cricketStadiumVideo from "@/assets/cricket-stadium-video.mp4";
 
 const Landing = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-        {/* Animated Stadium Background */}
-        <motion.div 
-          className="absolute inset-0"
-          initial={{ scale: 1.1 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 20, ease: "linear", repeat: Infinity, repeatType: "reverse" }}
-        >
-          <img 
-            src={cricketStadiumBg} 
-            alt="" 
+        {/* Video Background */}
+        <div className="absolute inset-0">
+          <video 
+            autoPlay 
+            loop 
+            muted 
+            playsInline
             className="w-full h-full object-cover"
-          />
-        </motion.div>
+          >
+            <source src={cricketStadiumVideo} type="video/mp4" />
+          </video>
+        </div>
         
         {/* Dark overlay for readability */}
-        <div className="absolute inset-0 bg-background/70" />
+        <div className="absolute inset-0 bg-background/60" />
         
-        {/* Animated gradient overlay */}
-        <motion.div 
-          className="absolute inset-0 bg-gradient-to-b from-transparent via-background/60 to-background"
-          initial={{ opacity: 0.8 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 3, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" }}
-        />
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/40 to-background" />
         
         {/* Animated accent glow - mimics stadium lights */}
         <motion.div 
