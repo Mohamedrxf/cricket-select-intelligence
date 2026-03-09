@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Shield, Scan, Network, Bot, Lock, Eye, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import cyberBgVideo from "@/assets/cyber-bg-video.mp4";
 
 /* Animated dependency network node */
 const NetworkNode = ({ x, y, size, delay, color }: { x: string; y: string; size: number; delay: number; color: string }) => (
