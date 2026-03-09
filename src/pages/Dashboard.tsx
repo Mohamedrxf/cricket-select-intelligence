@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Shield, Package, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
+import cyberBgVideo from "@/assets/cyber-bg-video.mp4";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
@@ -34,8 +35,16 @@ const Dashboard = () => {
   const offset = circumference - (score / 100) * circumference;
 
   return (
-    <div className="min-h-screen pt-24 pb-12 cyber-grid">
-      <div className="container">
+    <div className="min-h-screen pt-24 pb-12 relative overflow-hidden">
+      {/* Video Background */}
+      <video
+        autoPlay loop muted playsInline
+        className="absolute inset-0 w-full h-full object-cover z-0"
+        src={cyberBgVideo}
+      />
+      <div className="absolute inset-0 bg-background/80 z-[1]" />
+      <div className="absolute inset-0 cyber-grid z-[2]" />
+      <div className="container relative z-[3]">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <h1 className="text-2xl font-bold mb-1">Security Score Dashboard</h1>
           <p className="text-muted-foreground text-sm mb-8">Project analysis results for <span className="text-primary font-mono">my-web-app</span></p>
