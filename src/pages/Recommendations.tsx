@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import cyberBgVideo from "@/assets/cyber-bg-video.mp4";
+import PageTransition from "@/components/PageTransition";
 
 const recommendations = [
   {
@@ -33,78 +34,90 @@ const recommendations = [
 ];
 
 const getScoreBg = (s: number) =>
-  s >= 80 ? "bg-neon-green/10 text-neon-green border-neon-green/30"
-    : s >= 50 ? "bg-neon-yellow/10 text-neon-yellow border-neon-yellow/30"
-    : "bg-neon-red/10 text-neon-red border-neon-red/30";
+  s >= 80 ? "bg-neon-green/15 text-neon-green border-neon-green/40"
+    : s >= 50 ? "bg-neon-yellow/15 text-neon-yellow border-neon-yellow/40"
+    : "bg-neon-red/15 text-neon-red border-neon-red/40";
 
 const Recommendations = () => (
-  <div className="min-h-screen pt-24 pb-12 relative overflow-hidden">
-    <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover z-0" src={cyberBgVideo} />
-    <div className="absolute inset-0 bg-background/80 z-[1]" />
-    <div className="absolute inset-0 cyber-grid z-[2]" />
-    <div className="container max-w-4xl relative z-[3]">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <div className="flex items-center gap-3 mb-1">
-          <TrendingUp className="w-6 h-6 text-neon-green" />
-          <h1 className="text-2xl font-bold">Recommendations</h1>
-        </div>
-        <p className="text-muted-foreground text-sm mb-8">AI-suggested safer alternatives for your vulnerable dependencies.</p>
+  <PageTransition>
+    <div className="min-h-screen pt-24 pb-12 relative overflow-hidden">
+      <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover z-0" src={cyberBgVideo} />
+      <div className="absolute inset-0 bg-background/80 z-[1]" />
+      <div className="absolute inset-0 cyber-grid z-[2]" />
+      <div className="container max-w-4xl relative z-[3]">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+          <div className="flex items-center gap-3 mb-1">
+            <TrendingUp className="w-6 h-6 text-neon-green" />
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground drop-shadow-[0_0_10px_hsl(145_80%_50%/0.3)]">
+              Smart <span className="text-neon-green">Recommendations</span>
+            </h1>
+          </div>
+          <p className="text-foreground/60 text-sm mb-8">AI-suggested safer alternatives for your vulnerable dependencies.</p>
 
-        <div className="space-y-4">
-          {recommendations.map((r, i) => (
-            <motion.div key={r.current.name} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
-              <Card className="bg-card/50 border-border/50 hover:border-primary/20 transition-all">
-                <CardContent className="p-5">
-                  <div className="grid md:grid-cols-[1fr_auto_1fr] gap-4 items-center">
-                    {/* Current */}
-                    <div className="flex items-center gap-3">
-                      <XCircle className="w-5 h-5 text-neon-red flex-shrink-0" />
-                      <div>
-                        <code className="text-sm font-mono text-neon-red">{r.current.name}</code>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Badge className={`text-[10px] ${getScoreBg(r.current.score)}`}>Score: {r.current.score}</Badge>
-                          <span className="text-xs text-muted-foreground">{r.current.issues} issue{r.current.issues > 1 ? "s" : ""}</span>
+          <div className="space-y-4">
+            {recommendations.map((r, i) => (
+              <motion.div key={r.current.name} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
+                <Card className="bg-card/40 backdrop-blur-sm border-border/50 hover:border-neon-green/20 transition-all">
+                  <CardContent className="p-5">
+                    <div className="grid md:grid-cols-[1fr_auto_1fr] gap-4 items-center">
+                      {/* Current */}
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-lg bg-neon-red/10 border border-neon-red/20 flex items-center justify-center flex-shrink-0">
+                          <XCircle className="w-4 h-4 text-neon-red" />
+                        </div>
+                        <div>
+                          <code className="text-sm font-mono text-neon-red font-semibold">{r.current.name}</code>
+                          <div className="flex items-center gap-2 mt-1">
+                            <Badge className={`text-[10px] font-semibold ${getScoreBg(r.current.score)}`}>Score: {r.current.score}</Badge>
+                            <span className="text-xs text-foreground/50">{r.current.issues} issue{r.current.issues > 1 ? "s" : ""}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Arrow */}
+                      <div className="hidden md:flex items-center justify-center">
+                        <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center">
+                          <ArrowRight className="w-4 h-4 text-primary" />
+                        </div>
+                      </div>
+
+                      {/* Suggested */}
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-lg bg-neon-green/10 border border-neon-green/20 flex items-center justify-center flex-shrink-0">
+                          <CheckCircle className="w-4 h-4 text-neon-green" />
+                        </div>
+                        <div>
+                          <code className="text-sm font-mono text-neon-green font-semibold">{r.suggested.name}</code>
+                          <div className="flex items-center gap-2 mt-1">
+                            <Badge className={`text-[10px] font-semibold ${getScoreBg(r.suggested.score)}`}>Score: {r.suggested.score}</Badge>
+                            <span className="text-xs text-neon-green">No issues</span>
+                          </div>
                         </div>
                       </div>
                     </div>
 
-                    {/* Arrow */}
-                    <ArrowRight className="w-5 h-5 text-primary mx-auto hidden md:block" />
-
-                    {/* Suggested */}
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-neon-green flex-shrink-0" />
-                      <div>
-                        <code className="text-sm font-mono text-neon-green">{r.suggested.name}</code>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Badge className={`text-[10px] ${getScoreBg(r.suggested.score)}`}>Score: {r.suggested.score}</Badge>
-                          <span className="text-xs text-neon-green">No issues</span>
-                        </div>
-                      </div>
+                    <div className="mt-4 pt-4 border-t border-border/30 flex items-center justify-between gap-4">
+                      <p className="text-xs text-foreground/50">{r.reason}</p>
+                      <code className="text-[11px] font-mono bg-primary/5 border border-primary/20 px-3 py-1 rounded text-primary font-semibold whitespace-nowrap">{r.action}</code>
                     </div>
-                  </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
 
-                  <div className="mt-4 pt-4 border-t border-border/50 flex items-center justify-between">
-                    <p className="text-xs text-muted-foreground">{r.reason}</p>
-                    <code className="text-[11px] font-mono bg-muted px-3 py-1 rounded text-primary">{r.action}</code>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Apply all */}
-        <div className="mt-8 text-center">
-          <Button className="glow-blue gap-2 px-8 h-11">
-            <Shield className="w-4 h-4" />
-            Apply All Fixes
-          </Button>
-          <p className="text-xs text-muted-foreground mt-3">Estimated score improvement: 72 → 94</p>
-        </div>
-      </motion.div>
+          {/* Apply all */}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="mt-8 text-center">
+            <Button className="glow-blue gap-2 px-8 h-12 text-base">
+              <Shield className="w-5 h-5" />
+              Apply All Fixes
+            </Button>
+            <p className="text-xs text-foreground/50 mt-3">Estimated score improvement: <span className="text-neon-yellow font-mono font-bold">72</span> → <span className="text-neon-green font-mono font-bold">94</span></p>
+          </motion.div>
+        </motion.div>
+      </div>
     </div>
-  </div>
+  </PageTransition>
 );
 
 export default Recommendations;

@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Network } from "lucide-react";
+import cyberBgVideo from "@/assets/cyber-bg-video.mp4";
+import PageTransition from "@/components/PageTransition";
 
 interface Node {
   id: string;
@@ -32,85 +34,89 @@ const nodes: Node[] = [
 const nodeMap = Object.fromEntries(nodes.map((n) => [n.id, n]));
 
 const DependencyGraph = () => (
-  <div className="min-h-screen pt-24 pb-12 cyber-grid">
-    <div className="container">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold mb-1">Dependency Graph</h1>
-        <p className="text-muted-foreground text-sm mb-8">Interactive visualization of your dependency tree with risk indicators.</p>
+  <PageTransition>
+    <div className="min-h-screen pt-24 pb-12 relative overflow-hidden">
+      <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover z-0" src={cyberBgVideo} />
+      <div className="absolute inset-0 bg-background/80 z-[1]" />
+      <div className="absolute inset-0 cyber-grid z-[2]" />
+      <div className="container relative z-[3]">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+          <div className="flex items-center gap-3 mb-1">
+            <Network className="w-6 h-6 text-primary" />
+            <h1 className="text-2xl font-bold text-foreground drop-shadow-[0_0_10px_hsl(195_100%_50%/0.3)]">Dependency Graph</h1>
+          </div>
+          <p className="text-foreground/70 text-sm mb-8">Interactive visualization of your dependency tree with risk indicators.</p>
 
-        <Card className="bg-card/30 border-border/50 overflow-hidden">
-          <CardContent className="p-0">
-            <svg width="100%" viewBox="0 0 800 400" className="bg-background/50">
-              {/* Connections */}
-              {nodes.map((node) =>
-                node.deps.map((depId) => {
-                  const dep = nodeMap[depId];
-                  if (!dep) return null;
-                  return (
-                    <motion.line
-                      key={`${node.id}-${depId}`}
-                      x1={node.x} y1={node.y + 20}
-                      x2={dep.x} y2={dep.y - 5}
-                      stroke={riskColors[dep.risk]}
-                      strokeWidth={1.5}
-                      strokeOpacity={0.3}
-                      initial={{ pathLength: 0 }}
-                      animate={{ pathLength: 1 }}
-                      transition={{ duration: 1, delay: 0.5 }}
-                    />
-                  );
-                })
-              )}
-              {/* Nodes */}
-              {nodes.map((node, i) => (
-                <motion.g
-                  key={node.id}
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: i * 0.15, type: "spring" }}
-                >
-                  {/* Glow */}
-                  {(node.risk === "critical" || node.risk === "high") && (
-                    <circle cx={node.x} cy={node.y} r={25} fill={riskColors[node.risk]} fillOpacity={0.1}>
-                      <animate attributeName="r" values="25;35;25" dur="2s" repeatCount="indefinite" />
-                      <animate attributeName="fill-opacity" values="0.1;0.05;0.1" dur="2s" repeatCount="indefinite" />
-                    </circle>
-                  )}
-                  <circle
-                    cx={node.x} cy={node.y} r={node.id === "root" ? 18 : 14}
-                    fill={riskColors[node.risk]}
-                    fillOpacity={0.15}
-                    stroke={riskColors[node.risk]}
-                    strokeWidth={2}
-                  />
-                  <circle cx={node.x} cy={node.y} r={4} fill={riskColors[node.risk]} />
-                  <text
-                    x={node.x} y={node.y + (node.id === "root" ? 32 : 28)}
-                    textAnchor="middle"
-                    fill="hsl(210 40% 93%)"
-                    fontSize={10}
-                    fontFamily="JetBrains Mono, monospace"
+          <Card className="bg-card/40 border-border/50 overflow-hidden backdrop-blur-sm">
+            <CardContent className="p-0">
+              <svg width="100%" viewBox="0 0 800 400" className="bg-background/30">
+                {nodes.map((node) =>
+                  node.deps.map((depId) => {
+                    const dep = nodeMap[depId];
+                    if (!dep) return null;
+                    return (
+                      <motion.line
+                        key={`${node.id}-${depId}`}
+                        x1={node.x} y1={node.y + 20}
+                        x2={dep.x} y2={dep.y - 5}
+                        stroke={riskColors[dep.risk]}
+                        strokeWidth={1.5}
+                        strokeOpacity={0.4}
+                        initial={{ pathLength: 0 }}
+                        animate={{ pathLength: 1 }}
+                        transition={{ duration: 1, delay: 0.5 }}
+                      />
+                    );
+                  })
+                )}
+                {nodes.map((node, i) => (
+                  <motion.g
+                    key={node.id}
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: i * 0.15, type: "spring" }}
                   >
-                    {node.label}
-                  </text>
-                </motion.g>
-              ))}
-            </svg>
-          </CardContent>
-        </Card>
+                    {(node.risk === "critical" || node.risk === "high") && (
+                      <circle cx={node.x} cy={node.y} r={25} fill={riskColors[node.risk]} fillOpacity={0.1}>
+                        <animate attributeName="r" values="25;35;25" dur="2s" repeatCount="indefinite" />
+                        <animate attributeName="fill-opacity" values="0.1;0.05;0.1" dur="2s" repeatCount="indefinite" />
+                      </circle>
+                    )}
+                    <circle
+                      cx={node.x} cy={node.y} r={node.id === "root" ? 18 : 14}
+                      fill={riskColors[node.risk]}
+                      fillOpacity={0.15}
+                      stroke={riskColors[node.risk]}
+                      strokeWidth={2}
+                    />
+                    <circle cx={node.x} cy={node.y} r={4} fill={riskColors[node.risk]} />
+                    <text
+                      x={node.x} y={node.y + (node.id === "root" ? 32 : 28)}
+                      textAnchor="middle"
+                      fill="hsl(210 40% 93%)"
+                      fontSize={10}
+                      fontFamily="JetBrains Mono, monospace"
+                    >
+                      {node.label}
+                    </text>
+                  </motion.g>
+                ))}
+              </svg>
+            </CardContent>
+          </Card>
 
-        {/* Legend */}
-        <div className="flex items-center justify-center gap-6 mt-6">
-          {Object.entries(riskColors).map(([level, color]) => (
-            <div key={level} className="flex items-center gap-2 text-xs">
-              <div className="w-3 h-3 rounded-full border-2" style={{ borderColor: color, background: `${color}20` }} />
-              <span className="text-muted-foreground capitalize">{level}</span>
-            </div>
-          ))}
-        </div>
-      </motion.div>
+          <div className="flex items-center justify-center gap-6 mt-6">
+            {Object.entries(riskColors).map(([level, color]) => (
+              <div key={level} className="flex items-center gap-2 text-xs">
+                <div className="w-3 h-3 rounded-full border-2" style={{ borderColor: color, background: `${color}20` }} />
+                <span className="text-foreground/70 capitalize">{level}</span>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      </div>
     </div>
-  </div>
+  </PageTransition>
 );
 
 export default DependencyGraph;

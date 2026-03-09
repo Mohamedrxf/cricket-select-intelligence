@@ -1,19 +1,20 @@
 import { motion } from "framer-motion";
-import { Shield, Package, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
+import { Shield, Package, AlertTriangle, CheckCircle, XCircle, Activity } from "lucide-react";
 import cyberBgVideo from "@/assets/cyber-bg-video.mp4";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
+import PageTransition from "@/components/PageTransition";
 
 const score = 72;
 const getScoreColor = (s: number) => s >= 80 ? "hsl(145 80% 50%)" : s >= 60 ? "hsl(45 100% 55%)" : s >= 40 ? "hsl(20 85% 50%)" : "hsl(0 85% 55%)";
 const scoreColor = getScoreColor(score);
 
 const stats = [
-  { label: "Total Dependencies", value: 47, icon: Package, color: "text-primary" },
-  { label: "Safe Packages", value: 38, icon: CheckCircle, color: "text-neon-green" },
-  { label: "Vulnerable", value: 5, icon: AlertTriangle, color: "text-neon-yellow" },
-  { label: "High Risk", value: 4, icon: XCircle, color: "text-neon-red" },
+  { label: "Total Dependencies", value: 47, icon: Package, color: "text-primary", bgColor: "bg-primary/10 border-primary/20" },
+  { label: "Safe Packages", value: 38, icon: CheckCircle, color: "text-neon-green", bgColor: "bg-neon-green/10 border-neon-green/20" },
+  { label: "Vulnerable", value: 5, icon: AlertTriangle, color: "text-neon-yellow", bgColor: "bg-neon-yellow/10 border-neon-yellow/20" },
+  { label: "High Risk", value: 4, icon: XCircle, color: "text-neon-red", bgColor: "bg-neon-red/10 border-neon-red/20" },
 ];
 
 const pieData = [
@@ -35,118 +36,118 @@ const Dashboard = () => {
   const offset = circumference - (score / 100) * circumference;
 
   return (
-    <div className="min-h-screen pt-24 pb-12 relative overflow-hidden">
-      {/* Video Background */}
-      <video
-        autoPlay loop muted playsInline
-        className="absolute inset-0 w-full h-full object-cover z-0"
-        src={cyberBgVideo}
-      />
-      <div className="absolute inset-0 bg-background/80 z-[1]" />
-      <div className="absolute inset-0 cyber-grid z-[2]" />
-      <div className="container relative z-[3]">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-2xl font-bold mb-1">Security Score Dashboard</h1>
-          <p className="text-muted-foreground text-sm mb-8">Project analysis results for <span className="text-primary font-mono">my-web-app</span></p>
-
-          {/* Score gauge + Stats */}
-          <div className="grid lg:grid-cols-3 gap-6 mb-8">
-            {/* Gauge */}
-            <Card className="lg:col-span-1 bg-card/50 border-border/50">
-              <CardContent className="p-8 flex flex-col items-center justify-center">
-                <div className="relative w-48 h-48">
-                  <svg className="w-full h-full -rotate-90" viewBox="0 0 200 200">
-                    <circle cx="100" cy="100" r="80" fill="none" stroke="hsl(222 30% 12%)" strokeWidth="12" />
-                    <motion.circle
-                      cx="100" cy="100" r="80" fill="none"
-                      stroke={scoreColor}
-                      strokeWidth="12"
-                      strokeLinecap="round"
-                      strokeDasharray={circumference}
-                      initial={{ strokeDashoffset: circumference }}
-                      animate={{ strokeDashoffset: offset }}
-                      transition={{ duration: 1.5, ease: "easeOut" }}
-                      style={{ filter: `drop-shadow(0 0 8px ${scoreColor})` }}
-                    />
-                  </svg>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-5xl font-black font-mono" style={{ color: scoreColor }}>{score}</span>
-                    <span className="text-xs text-muted-foreground mt-1">/ 100</span>
-                  </div>
-                </div>
-                <Badge className="mt-4 bg-neon-yellow/10 text-neon-yellow border-neon-yellow/30">
-                  Moderate Risk
-                </Badge>
-              </CardContent>
-            </Card>
-
-            {/* Stat cards */}
-            <div className="lg:col-span-2 grid sm:grid-cols-2 gap-4">
-              {stats.map((s, i) => (
-                <motion.div key={s.label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + i * 0.1 }}>
-                  <Card className="bg-card/50 border-border/50 hover:border-primary/20 transition-colors">
-                    <CardContent className="p-5 flex items-center gap-4">
-                      <div className="w-11 h-11 rounded-lg bg-muted flex items-center justify-center">
-                        <s.icon className={`w-5 h-5 ${s.color}`} />
-                      </div>
-                      <div>
-                        <p className="text-2xl font-bold font-mono">{s.value}</p>
-                        <p className="text-xs text-muted-foreground">{s.label}</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
+    <PageTransition>
+      <div className="min-h-screen pt-24 pb-12 relative overflow-hidden">
+        <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover z-0" src={cyberBgVideo} />
+        <div className="absolute inset-0 bg-background/80 z-[1]" />
+        <div className="absolute inset-0 cyber-grid z-[2]" />
+        <div className="container relative z-[3]">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+            <div className="flex items-center gap-3 mb-1">
+              <Activity className="w-6 h-6 text-primary" />
+              <h1 className="text-2xl md:text-3xl font-bold text-foreground drop-shadow-[0_0_10px_hsl(195_100%_50%/0.3)]">
+                Security Score <span className="text-primary">Dashboard</span>
+              </h1>
             </div>
-          </div>
+            <p className="text-foreground/60 text-sm mb-8">Project analysis results for <span className="text-primary font-mono font-semibold">my-web-app</span></p>
 
-          {/* Charts */}
-          <div className="grid lg:grid-cols-2 gap-6">
-            <Card className="bg-card/50 border-border/50">
-              <CardHeader>
-                <CardTitle className="text-base">Dependency Health</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={220}>
-                  <PieChart>
-                    <Pie data={pieData} cx="50%" cy="50%" innerRadius={55} outerRadius={85} dataKey="value" strokeWidth={0}>
-                      {pieData.map((d, i) => <Cell key={i} fill={d.color} />)}
-                    </Pie>
-                  </PieChart>
-                </ResponsiveContainer>
-                <div className="flex items-center justify-center gap-4 mt-2">
-                  {pieData.map((d) => (
-                    <div key={d.name} className="flex items-center gap-1.5 text-xs">
-                      <div className="w-2 h-2 rounded-full" style={{ background: d.color }} />
-                      <span className="text-muted-foreground">{d.name}</span>
+            {/* Score gauge + Stats */}
+            <div className="grid lg:grid-cols-3 gap-6 mb-8">
+              <Card className="lg:col-span-1 bg-card/40 backdrop-blur-sm border-border/50">
+                <CardContent className="p-8 flex flex-col items-center justify-center">
+                  <div className="relative w-48 h-48">
+                    <svg className="w-full h-full -rotate-90" viewBox="0 0 200 200">
+                      <circle cx="100" cy="100" r="80" fill="none" stroke="hsl(222 30% 12%)" strokeWidth="12" />
+                      <motion.circle
+                        cx="100" cy="100" r="80" fill="none"
+                        stroke={scoreColor}
+                        strokeWidth="12"
+                        strokeLinecap="round"
+                        strokeDasharray={circumference}
+                        initial={{ strokeDashoffset: circumference }}
+                        animate={{ strokeDashoffset: offset }}
+                        transition={{ duration: 1.5, ease: "easeOut" }}
+                        style={{ filter: `drop-shadow(0 0 12px ${scoreColor})` }}
+                      />
+                    </svg>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <span className="text-5xl font-black font-mono" style={{ color: scoreColor, textShadow: `0 0 20px ${scoreColor}40` }}>{score}</span>
+                      <span className="text-xs text-foreground/50 mt-1">/ 100</span>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                  </div>
+                  <Badge className="mt-4 bg-neon-yellow/15 text-neon-yellow border-neon-yellow/40 font-semibold">
+                    Moderate Risk
+                  </Badge>
+                </CardContent>
+              </Card>
 
-            <Card className="bg-card/50 border-border/50">
-              <CardHeader>
-                <CardTitle className="text-base">Vulnerability Severity</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={220}>
-                  <BarChart data={severityData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(222 25% 16%)" />
-                    <XAxis dataKey="name" tick={{ fill: "hsl(215 20% 50%)", fontSize: 12 }} />
-                    <YAxis tick={{ fill: "hsl(215 20% 50%)", fontSize: 12 }} />
-                    <Tooltip contentStyle={{ background: "hsl(222 44% 8%)", border: "1px solid hsl(222 25% 16%)", borderRadius: 8, color: "hsl(210 40% 93%)" }} />
-                    <Bar dataKey="count" radius={[4, 4, 0, 0]}>
-                      {severityData.map((d, i) => <Cell key={i} fill={d.fill} />)}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-          </div>
-        </motion.div>
+              <div className="lg:col-span-2 grid sm:grid-cols-2 gap-4">
+                {stats.map((s, i) => (
+                  <motion.div key={s.label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + i * 0.1 }}>
+                    <Card className="bg-card/40 backdrop-blur-sm border-border/50 hover:border-primary/30 transition-all hover:bg-card/60">
+                      <CardContent className="p-5 flex items-center gap-4">
+                        <div className={`w-12 h-12 rounded-xl border flex items-center justify-center ${s.bgColor}`}>
+                          <s.icon className={`w-5 h-5 ${s.color}`} />
+                        </div>
+                        <div>
+                          <p className="text-2xl font-black font-mono text-foreground">{s.value}</p>
+                          <p className="text-xs text-foreground/60 font-medium">{s.label}</p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+
+            {/* Charts */}
+            <div className="grid lg:grid-cols-2 gap-6">
+              <Card className="bg-card/40 backdrop-blur-sm border-border/50">
+                <CardHeader>
+                  <CardTitle className="text-base text-foreground">Dependency Health</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={220}>
+                    <PieChart>
+                      <Pie data={pieData} cx="50%" cy="50%" innerRadius={55} outerRadius={85} dataKey="value" strokeWidth={0}>
+                        {pieData.map((d, i) => <Cell key={i} fill={d.color} />)}
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="flex items-center justify-center gap-4 mt-2">
+                    {pieData.map((d) => (
+                      <div key={d.name} className="flex items-center gap-1.5 text-xs">
+                        <div className="w-2.5 h-2.5 rounded-full" style={{ background: d.color, boxShadow: `0 0 6px ${d.color}60` }} />
+                        <span className="text-foreground/60">{d.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-card/40 backdrop-blur-sm border-border/50">
+                <CardHeader>
+                  <CardTitle className="text-base text-foreground">Vulnerability Severity</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={220}>
+                    <BarChart data={severityData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(222 25% 16%)" />
+                      <XAxis dataKey="name" tick={{ fill: "hsl(210 40% 70%)", fontSize: 12 }} />
+                      <YAxis tick={{ fill: "hsl(210 40% 70%)", fontSize: 12 }} />
+                      <Tooltip contentStyle={{ background: "hsl(222 44% 8%)", border: "1px solid hsl(222 25% 20%)", borderRadius: 8, color: "hsl(210 40% 93%)" }} />
+                      <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+                        {severityData.map((d, i) => <Cell key={i} fill={d.fill} />)}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+            </div>
+          </motion.div>
+        </div>
       </div>
-    </div>
+    </PageTransition>
   );
 };
 
