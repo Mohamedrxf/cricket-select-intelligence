@@ -41,17 +41,34 @@ const Landing = () => {
   return (
     <div className="min-h-screen">
       {/* Hero */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden cyber-grid">
-        {/* Ambient glows */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Video background */}
+        <div className="absolute inset-0 z-0">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover"
+          >
+            <source src={cyberBgVideo} type="video/mp4" />
+          </video>
+          {/* Dark overlay for readability */}
+          <div className="absolute inset-0 bg-background/75" />
+          {/* Gradient bottom fade */}
+          <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-transparent to-background" />
+        </div>
+
+        {/* Ambient glows on top of video */}
         <motion.div
-          className="absolute top-1/4 left-1/6 w-[500px] h-[500px] rounded-full blur-[120px]"
-          style={{ background: "radial-gradient(circle, hsl(195 100% 50% / 0.15), transparent)" }}
+          className="absolute top-1/4 left-1/6 w-[500px] h-[500px] rounded-full blur-[120px] z-[1]"
+          style={{ background: "radial-gradient(circle, hsl(195 100% 50% / 0.12), transparent)" }}
           animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.15, 1] }}
           transition={{ duration: 5, repeat: Infinity }}
         />
         <motion.div
-          className="absolute bottom-1/4 right-1/6 w-[400px] h-[400px] rounded-full blur-[100px]"
-          style={{ background: "radial-gradient(circle, hsl(265 80% 60% / 0.12), transparent)" }}
+          className="absolute bottom-1/4 right-1/6 w-[400px] h-[400px] rounded-full blur-[100px] z-[1]"
+          style={{ background: "radial-gradient(circle, hsl(265 80% 60% / 0.1), transparent)" }}
           animate={{ opacity: [0.4, 0.2, 0.4], scale: [1.1, 1, 1.1] }}
           transition={{ duration: 6, repeat: Infinity, delay: 1 }}
         />
