@@ -3,6 +3,7 @@ import { ArrowRight, CheckCircle, Shield, TrendingUp, XCircle } from "lucide-rea
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import cyberBgVideo from "@/assets/cyber-bg-video.mp4";
 
 const recommendations = [
   {
@@ -37,8 +38,11 @@ const getScoreBg = (s: number) =>
     : "bg-neon-red/10 text-neon-red border-neon-red/30";
 
 const Recommendations = () => (
-  <div className="min-h-screen pt-24 pb-12 cyber-grid">
-    <div className="container max-w-4xl">
+  <div className="min-h-screen pt-24 pb-12 relative overflow-hidden">
+    <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover z-0" src={cyberBgVideo} />
+    <div className="absolute inset-0 bg-background/80 z-[1]" />
+    <div className="absolute inset-0 cyber-grid z-[2]" />
+    <div className="container max-w-4xl relative z-[3]">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <div className="flex items-center gap-3 mb-1">
           <TrendingUp className="w-6 h-6 text-neon-green" />

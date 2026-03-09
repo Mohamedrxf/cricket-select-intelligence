@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { AlertTriangle, ExternalLink, ShieldAlert, ShieldCheck } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import cyberBgVideo from "@/assets/cyber-bg-video.mp4";
 
 const vulns = [
   { cve: "CVE-2024-48999", pkg: "lodash@4.17.20", severity: "Critical", score: 9.8, desc: "Prototype Pollution in lodash allows remote attackers to manipulate object prototypes.", fix: "Upgrade to lodash@4.17.21" },
@@ -19,8 +20,11 @@ const severityColor: Record<string, string> = {
 };
 
 const Vulnerabilities = () => (
-  <div className="min-h-screen pt-24 pb-12 cyber-grid">
-    <div className="container">
+  <div className="min-h-screen pt-24 pb-12 relative overflow-hidden">
+    <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover z-0" src={cyberBgVideo} />
+    <div className="absolute inset-0 bg-background/80 z-[1]" />
+    <div className="absolute inset-0 cyber-grid z-[2]" />
+    <div className="container relative z-[3]">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <div className="flex items-center gap-3 mb-1">
           <ShieldAlert className="w-6 h-6 text-neon-red" />
