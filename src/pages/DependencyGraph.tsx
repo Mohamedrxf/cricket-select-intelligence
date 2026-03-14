@@ -12,7 +12,7 @@ interface GraphNode {
   type: string;
   x?: number;
   y?: number;
-  depth?: number; // 0 = root, 1 = direct dep, 2+ = expanded
+  depth?: number;
 }
 
 interface GraphEdge {
@@ -40,6 +40,7 @@ const DependencyGraph = () => {
 
   const activeNode = selectedNode || hoveredNode;
 
+  // All hooks MUST be before any early return
   const connectedNodeIds = useMemo(() => {
     if (!activeNode) return null;
     const ids = new Set<string>([activeNode]);
@@ -90,7 +91,6 @@ const DependencyGraph = () => {
 
   const findNode = (id: string) => positionedNodes.find(n => n.id === id);
 
-  // Attack path edge set
   const attackEdgeSet = new Set<string>();
   attackPaths.forEach(path => {
     for (let i = 0; i < path.length - 1; i++) {
@@ -98,7 +98,6 @@ const DependencyGraph = () => {
     }
   });
 
-  // Edges connected to hovered/selected node
   const getConnectedEdges = (nodeId: string | null) => {
     if (!nodeId) return new Set<number>();
     const set = new Set<number>();
@@ -130,7 +129,6 @@ const DependencyGraph = () => {
     }
   };
 
-  // Node color logic based on depth
   const getNodeGradient = (node: GraphNode, isHovered: boolean, isSelected: boolean) => {
     if (isSelected) return "url(#node-gradient-selected)";
     if (isHovered) return "url(#node-gradient-hover)";
@@ -162,9 +160,7 @@ const DependencyGraph = () => {
                 <Network className="w-7 h-7 text-primary drop-shadow-[0_0_10px_hsl(var(--primary)/0.8)]" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-foreground drop-shadow-lg tracking-tight">
-                  Dependency Graph
-                </h1>
+                <h1 className="text-2xl font-bold text-foreground drop-shadow-lg tracking-tight">Dependency Graph</h1>
                 <p className="text-sm text-muted-foreground font-mono">
                   {nodes.length} packages · {edges.length} connections · depth {Math.max(...positionedNodes.map(n => n.depth ?? 0))} levels
                 </p>
@@ -245,10 +241,9 @@ const DependencyGraph = () => {
                   className="mx-auto"
                   style={{ minWidth: width }}
                   onClick={(e) => {
-                    if ((e.target as SVGElement).tagName === 'svg') setSelectedNode(null);
+                    if ((e.target as SVGElement).tagName === "svg") setSelectedNode(null);
                   }}
                 >
-                  {/* Enhanced SVG Definitions */}
                   <defs>
                     {/* Glow filters */}
                     <filter id="glow-cyan" x="-50%" y="-50%" width="200%" height="200%">
@@ -271,7 +266,7 @@ const DependencyGraph = () => {
                       <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#000" floodOpacity="0.4" />
                     </filter>
 
-                    {/* Root node - Vibrant Cyan/Teal */}
+                    {/* Root - Vibrant Cyan/Teal */}
                     <radialGradient id="node-gradient-root" cx="35%" cy="30%">
                       <stop offset="0%" stopColor="#00e5ff" />
                       <stop offset="60%" stopColor="#00bcd4" />
@@ -285,7 +280,7 @@ const DependencyGraph = () => {
                       <stop offset="100%" stopColor="#2563eb" />
                     </radialGradient>
 
-                    {/* Expanded child nodes - Emerald Green */}
+                    {/* Expanded child - Emerald Green */}
                     <radialGradient id="node-gradient-expanded" cx="35%" cy="30%">
                       <stop offset="0%" stopColor="#34d399" />
                       <stop offset="60%" stopColor="#10b981" />
@@ -319,11 +314,6 @@ const DependencyGraph = () => {
                       <stop offset="0%" stopColor="#a855f7" stopOpacity="0.8" />
                       <stop offset="100%" stopColor="#7c3aed" stopOpacity="0.4" />
                     </linearGradient>
-
-                    {/* Animated dash pattern */}
-                    <pattern id="dash-pattern" patternUnits="userSpaceOnUse" width="12" height="1">
-                      <line x1="0" y1="0" x2="6" y2="0" stroke="currentColor" strokeWidth="1" />
-                    </pattern>
                   </defs>
 
                   {/* Background subtle radial */}
@@ -400,10 +390,7 @@ const DependencyGraph = () => {
                       <motion.g
                         key={node.id}
                         initial={{ opacity: 0, scale: 0 }}
-                        animate={{
-                          opacity: isDimmed ? 0.25 : 1,
-                          scale: 1,
-                        }}
+                        animate={{ opacity: isDimmed ? 0.25 : 1, scale: 1 }}
                         transition={{ delay: i * 0.02, type: "spring", stiffness: 280, damping: 22 }}
                         onClick={(e) => { e.stopPropagation(); expandNode(node.id); }}
                         onMouseEnter={() => setHoveredNode(node.id)}
@@ -414,26 +401,15 @@ const DependencyGraph = () => {
                         {isRoot && (
                           <>
                             <motion.circle
-                              cx={node.x}
-                              cy={node.y}
-                              r={radius + 14}
-                              fill="none"
-                              stroke="#00e5ff"
-                              strokeWidth="0.5"
-                              strokeOpacity={0.2}
-                              strokeDasharray="4 4"
+                              cx={node.x} cy={node.y} r={radius + 14}
+                              fill="none" stroke="#00e5ff" strokeWidth="0.5" strokeOpacity={0.2} strokeDasharray="4 4"
                               animate={{ rotate: 360 }}
                               transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                               style={{ transformOrigin: `${node.x}px ${node.y}px` }}
                             />
                             <motion.circle
-                              cx={node.x}
-                              cy={node.y}
-                              r={radius + 8}
-                              fill="none"
-                              stroke="#00e5ff"
-                              strokeWidth="0.8"
-                              strokeOpacity={0.15}
+                              cx={node.x} cy={node.y} r={radius + 8}
+                              fill="none" stroke="#00e5ff" strokeWidth="0.8" strokeOpacity={0.15}
                             />
                           </>
                         )}
@@ -441,13 +417,8 @@ const DependencyGraph = () => {
                         {/* Glow ring on hover/select */}
                         {(isHovered || isSelected) && (
                           <motion.circle
-                            cx={node.x}
-                            cy={node.y}
-                            r={radius + 6}
-                            fill="none"
-                            stroke={glowColor}
-                            strokeWidth="1.5"
-                            strokeOpacity={0.5}
+                            cx={node.x} cy={node.y} r={radius + 6}
+                            fill="none" stroke={glowColor} strokeWidth="1.5" strokeOpacity={0.5}
                             initial={{ scale: 0.8, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ duration: 0.2 }}
@@ -478,9 +449,7 @@ const DependencyGraph = () => {
 
                         {/* Main node circle */}
                         <circle
-                          cx={node.x}
-                          cy={node.y}
-                          r={radius}
+                          cx={node.x} cy={node.y} r={radius}
                           fill={getNodeGradient(node, isHovered, isSelected)}
                           filter="url(#shadow-soft)"
                           className="transition-all duration-200"
@@ -496,16 +465,12 @@ const DependencyGraph = () => {
                           fillOpacity={0.2}
                         />
 
-                        {/* Node type icon indicator for root */}
+                        {/* Root icon */}
                         {isRoot && (
                           <text
-                            x={node.x}
-                            y={(node.y ?? 0) + 5}
-                            textAnchor="middle"
-                            fill="hsl(var(--primary-foreground))"
-                            fontSize="14"
-                            fontWeight="700"
-                            fontFamily="'JetBrains Mono', monospace"
+                            x={node.x} y={(node.y ?? 0) + 5}
+                            textAnchor="middle" fill="hsl(var(--primary-foreground))"
+                            fontSize="14" fontWeight="700" fontFamily="'JetBrains Mono', monospace"
                           >
                             ⬡
                           </text>
@@ -537,20 +502,12 @@ const DependencyGraph = () => {
                         {isExpanded && !isRoot && (
                           <g>
                             <circle
-                              cx={(node.x ?? 0) + radius - 2}
-                              cy={(node.y ?? 0) - radius + 2}
-                              r="6"
-                              fill="#059669"
-                              stroke="#0d1117"
-                              strokeWidth="1.5"
+                              cx={(node.x ?? 0) + radius - 2} cy={(node.y ?? 0) - radius + 2}
+                              r="6" fill="#059669" stroke="#0d1117" strokeWidth="1.5"
                             />
                             <text
-                              x={(node.x ?? 0) + radius - 2}
-                              y={(node.y ?? 0) - radius + 5}
-                              textAnchor="middle"
-                              fill="white"
-                              fontSize="7"
-                              fontWeight="700"
+                              x={(node.x ?? 0) + radius - 2} y={(node.y ?? 0) - radius + 5}
+                              textAnchor="middle" fill="white" fontSize="7" fontWeight="700"
                               fontFamily="'JetBrains Mono', monospace"
                             >
                               +
@@ -582,17 +539,12 @@ const DependencyGraph = () => {
                     <div className="flex-1">
                       <p className="text-sm font-semibold font-mono" style={{ color: "#fbbf24" }}>{selectedNode}</p>
                       <p className="text-xs text-muted-foreground">
-                        {edges.filter(e => e.source === selectedNode).length} dependencies ·
+                        {edges.filter(e => e.source === selectedNode).length} dependencies ·{" "}
                         {edges.filter(e => e.target === selectedNode).length} dependents ·
                         {expandedFromSet.has(selectedNode) ? " Expanded child" : findNode(selectedNode)?.type === "root" ? " Root package" : " Direct dependency"}
                       </p>
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setSelectedNode(null)}
-                      className="text-muted-foreground"
-                    >
+                    <Button variant="ghost" size="sm" onClick={() => setSelectedNode(null)} className="text-muted-foreground">
                       Dismiss
                     </Button>
                   </CardContent>
