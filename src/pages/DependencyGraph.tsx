@@ -108,19 +108,7 @@ const DependencyGraph = () => {
     });
     return set;
   };
-  const activeNode = selectedNode || hoveredNode;
   const connectedEdges = getConnectedEdges(activeNode);
-
-  // Connected nodes for dimming
-  const connectedNodeIds = useMemo(() => {
-    if (!activeNode) return null;
-    const set = new Set<string>([activeNode]);
-    edges.forEach(e => {
-      if (e.source === activeNode) set.add(e.target);
-      if (e.target === activeNode) set.add(e.source);
-    });
-    return set;
-  }, [activeNode, edges]);
 
   const expandNode = async (nodeId: string) => {
     setExpandingNode(nodeId);
