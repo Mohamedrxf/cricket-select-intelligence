@@ -38,6 +38,19 @@ const DependencyGraph = () => {
   const [showLabels, setShowLabels] = useState(true);
   const [expandedFromSet, setExpandedFromSet] = useState<Set<string>>(new Set());
 
+  const activeNode = selectedNode || hoveredNode;
+
+  // Connected nodes for dimming - must be before early return
+  const connectedNodeIds = useMemo(() => {
+    if (!activeNode) return null;
+    const set = new Set<string>([activeNode]);
+    graph.edges.forEach(e => {
+      if (e.source === activeNode) set.add(e.target);
+      if (e.target === activeNode) set.add(e.source);
+    });
+    return set;
+  }, [activeNode, graph.edges]);
+
   if (!graph.nodes.length) {
     return (
       <PageTransition>
