@@ -1,73 +1,99 @@
-# Welcome to your Lovable project
+# 🔐 OS3 - Open Source Supply Chain Security Scanner
 
-## Project info
+## 🚀 Overview
+OS3 is a developer-first security tool designed to analyze open-source packages **before installation**.  
+It helps developers identify vulnerabilities, detect fake packages, and understand attack paths in real time.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+👉 Instead of reacting after installation, OS3 enables **proactive security decisions**.
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## ❗ Problem Statement
+Modern development relies heavily on open-source packages.  
+However:
 
-**Use Lovable**
+- Developers install packages without knowing their risks  
+- Existing tools analyze vulnerabilities only after installation  
+- Fake or malicious packages can easily enter the system  
+- No visibility into how vulnerabilities propagate through dependencies  
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## 💡 Solution
+OS3 provides **pre-installation security analysis** through:
 
-**Use your preferred IDE**
+- 🔍 Dependency analysis  
+- ⚠️ Vulnerability detection  
+- 🛣️ Attack path identification  
+- 🧠 Security scoring system  
+- 🚫 Fake package detection  
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+---
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 🌟 Key Features
 
-Follow these steps:
+### 💻 CLI Tool (Global via PyPI)
+- Install with a single command
+- Works directly in developer workflow
+- No setup required
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```bash
+pip install os3-security
 ```
 
-**Edit a file directly in GitHub**
+## 🌐 Web Application
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+OS³ also provides a **web-based interface** for interactive security analysis.
 
-**Use GitHub Codespaces**
+🔗 Live App: https://os3org.web.app  
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### 🔍 Features
 
-## What technologies are used for this project?
+- **Package Scanning**
+  - Enter any open-source package name (e.g., `express`)
+  - Performs real-time analysis
 
-This project is built with:
+- **Dependency Graph Visualization**
+  - Displays full dependency tree
+  - Highlights **potential attack paths**
+  - Helps identify vulnerable dependency chains
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- **Attack Path Identification**
+  - Shows how vulnerabilities propagate
+  - Helps developers understand exploitation risks
 
-## How can I deploy this project?
+- **🤖 AI Chatbot Assistant**
+  - Answers security-related queries
+  - Suggests safer alternatives
+  - Explains vulnerabilities in simple terms
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+---
 
-## Can I connect a custom domain to my Lovable project?
+## 🐍 CLI Tool (PyPI)
 
-Yes, you can!
+OS³ is available as a **Python package** for direct developer usage.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+⚙️ Usage
+os3 --help
+🚀 Example
+os3 scan express
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+👉 With just a few commands, developers can:
+
+Scan packages
+Check security scores
+Analyze dependencies
+Get safer alternatives
+
+✨ Features Implemented
+✅ CLI-based package scanning
+✅ PyPI deployment (os3-security)
+✅ Web-based package scanning interface
+✅ Real-time package analysis
+✅ Dependency graph visualization
+✅ Attack path identification
+✅ Security scoring system
+✅ AI chatbot for assistance
+✅ Firebase real-time backend
+✅ Live dashboard for insights
+
